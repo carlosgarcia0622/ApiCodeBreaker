@@ -3,7 +3,7 @@ package hello;
 
 public class CodeBreaker {
 
-private String secret;
+private static String secret;
 private String result;
 private String message;
 	
@@ -22,11 +22,24 @@ private String message;
 		
 		this.result = result;
 		this.message = message;
+		
+		
 	}
 	
+	public String getResult() {
+		return result;
+	}
+	public String getMessage() {
+		return message;
+	}
+	
+	/*public String getSecret() {
+		return secret;
+	}*/
+
 
 	
-	public String guess (String data ){
+	public String guess(String data ){
 		
 		String result="";
 		String aux = "";
