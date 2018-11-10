@@ -1,5 +1,8 @@
 package hello;
 
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.web.bind.annotation.*;
 
 
@@ -8,6 +11,7 @@ public class CodeBreakerController {
 
     private CodeBreaker codeBreaker;
 
+    @CrossOrigin(origins="")
     @GetMapping("/guess/{id}")
     public CodeBreaker greeting(@PathVariable String id) {
     	String result = "";
@@ -25,14 +29,22 @@ public class CodeBreakerController {
         		
     }
     
-    
-    @RequestMapping(value = "/secret", method = RequestMethod.POST)
-    public void generateSecret(@RequestBody String secret) {
+    @CrossOrigin(origins="")
+    @RequestMapping(value = "/guess", method = RequestMethod.POST, headers= {"accept=aplication/json","content-type=application/json","content-type=text/plain"})
+    public void generateSecret(@RequestBody Optional<Map<String, String>> secret) {
+    	if(secret.isPresent()) {
+    		codeBreaker = new CodeBreaker(secret.get().get("secret"));
+    		
+    	}
+    	else {
+    		codeBreaker = new CodeBreaker();
+    	}
+    		
+
     	
-    	codeBreaker = new CodeBreaker(secret);
     	
     }
-    
+    @CrossOrigin(origins="")
     @RequestMapping(value = "/randomSecret", method = RequestMethod.POST)
     public void generateRandomSecret() {
     	
