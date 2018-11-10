@@ -15,40 +15,110 @@
  */
 package hello;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import main.java.hello.CodeBreaker;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc
 public class GreetingControllerTests {
+	
+	private CodeBreaker code = new CodeBreaker("1234");
+	String result;
 
-    @Autowired
-    private MockMvc mockMvc;
 
+    
     @Test
-    public void noParamGreetingShouldReturnDefaultMessage() throws Exception {
-
-        this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value("Hello, World!"));
-    }
-
-    @Test
-    public void paramGreetingShouldReturnTailoredMessage() throws Exception {
-
-        this.mockMvc.perform(get("/greeting").param("name", "Spring Community"))
-                .andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value("Hello, Spring Community!"));
-    }
-
+	public void guessAllMatch() {
+		result = code.guess("1234");
+		assertEquals("xxxx", result);
+	}
+	
+	@Test
+	public void guessOneFailAndThreeMatch(){
+		result = code.guess("0234");
+		assertEquals("xxx", result);
+	}
+	
+	@Test
+	public void guessTwoFailAndTwoMatch(){
+		result = code.guess("0034");
+		assertEquals("xx", result);
+	}
+	
+	@Test
+	public void guessThreeFailAndOneMatch(){
+		result = code.guess("0004");
+		assertEquals("x", result);
+	}
+	
+	@Test
+	public void guessAllFail(){
+		result = code.guess("0000");
+		assertEquals("", result);
+	}
+	
+	@Test
+	public void guessAllMessy(){
+		result = code.guess("4321");
+		assertEquals("____", result);
+	}
+	
+	@Test
+	public void guessThreeMessy(){
+		result = code.guess("4120");
+		assertEquals("___", result);
+	}
+	
+	@Test
+	public void guessTwoMessy(){
+		result = code.guess("0041");
+		assertEquals("__", result);
+	}
+	
+	@Test
+	public void guessOneMessy(){
+		result = code.guess("0040");
+		assertEquals("_", result);
+	}
+	
+	@Test
+	public void guessOneMatchThreeMessy(){
+		result = code.guess("2314");
+		assertEquals("x___", result);
+	}
+	
+	@Test
+	public void guessTwoMatchTwoMessy(){
+		result = code.guess("1432");
+		assertEquals("xx__", result);
+	}
+	
+	@Test
+	public void guessOneFailThreeMessy(){
+		result = code.guess("4320");
+		assertEquals("___", result);
+	}
+	
+	@Test
+	public void guessTwoFailTwoMessy(){
+		result = code.guess("0041");
+		assertEquals("__", result);
+	}
+	
+	@Test
+	public void guessThreeFailOneMessy(){
+		result = code.guess("0400");
+		assertEquals("_", result);
+	}
+	
 }
+    
+    
+
+
